@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "Tech Stocks",
+    "owner": "Soumya",
+    "value": 150000,
+    "assets": [
+      { "symbol": "AAPL", "shares": 20 },
+      { "symbol": "GOOGL", "shares": 10 }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Crypto Fund",
+    "owner": "Alex",
+    "value": 50000,
+    "assets": [
+      { "symbol": "BTC", "shares": 1 },
+      { "symbol": "ETH", "shares": 5 }
+    ]
+  }
+]
