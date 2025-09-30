@@ -7,23 +7,25 @@
     <p><strong>Created:</strong> {{ formattedDate }}</p>
 
     <h3>Holdings</h3>
-    <table v-if="portfolio.holdings && portfolio.holdings.length" class="holdings-table">
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Value (₹)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(holding, index) in portfolio.holdings" :key="index">
-          <td>{{ holding.type }}</td>
-          <td>{{ holding.value.toLocaleString() }}</td>
-        </tr>
-      </tbody>
+    <table v-if="portfolio.holdings?.length">
+      <tr v-for="(h, i) in portfolio.holdings" :key="i">
+        <td>{{ h.type }}</td>
+        <td>₹{{ h.value.toLocaleString() }}</td>
+      </tr>
     </table>
-    <p v-else class="empty">No holdings added</p>
-  </div>
+    <p v-else class="empty">No holdings</p>
 
+    <h3>Sold Holdings</h3>
+    <table v-if="portfolio.soldings?.length">
+      <tr v-for="(s, i) in portfolio.soldings" :key="i">
+        <td>{{ s.type }}</td>
+        <td>₹{{ s.value.toLocaleString() }}</td>
+      </tr>
+    </table>
+    <p v-else class="empty">No sold holdings</p>
+
+    <p><strong>Total Returns:</strong> ₹{{ totalReturns.toLocaleString() }}</p>
+  </div>
   <div v-else class="empty">Select a portfolio to view details</div>
 </template>
 
@@ -35,24 +37,26 @@ const props = defineProps({
   users: { type: Array, default: () => [] }
 });
 
-// Find client name
 const clientName = computed(() => {
-  if (!props.portfolio) return "-";
-  const user = props.users.find(u => u.id === props.portfolio.clientId);
+  const user = props.users.find(u => u.id === props.portfolio?.clientId);
   return user ? user.name : "-";
 });
 
-// Find client start age
 const clientAge = computed(() => {
-  if (!props.portfolio) return "-";
-  const user = props.users.find(u => u.id === props.portfolio.clientId);
-  return user && user.startAge ? user.startAge : "-";
+  const user = props.users.find(u => u.id === props.portfolio?.clientId);
+  return user?.startAge || "-";
 });
 
-// Format portfolio created date
 const formattedDate = computed(() => {
   if (!props.portfolio) return "-";
   return new Date(props.portfolio.createdAt).toLocaleDateString();
+});
+
+const totalReturns = computed(() => {
+  if (!props.portfolio) return 0;
+  const holdingsTotal = props.portfolio.holdings?.reduce((s,h)=>s+h.value,0) || 0;
+  const soldingsTotal = props.portfolio.soldings?.reduce((s,h)=>s+h.value,0) || 0;
+  return holdingsTotal + soldingsTotal;
 });
 </script>
 
@@ -60,27 +64,22 @@ const formattedDate = computed(() => {
 .portfolio-detail {
   background: white;
   padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-.empty {
-  color: #888;
-  text-align: center;
-  margin-top: 1rem;
-}
-.holdings-table {
+
+h2 { color: #16a34a; }
+h3 { margin-top: 1rem; color: #1e3a8a; }
+
+table {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   border-collapse: collapse;
 }
-.holdings-table th,
-.holdings-table td {
+
+td {
   border: 1px solid #ddd;
   padding: 0.6rem;
-  text-align: left;
 }
-.holdings-table th {
-  background: #f3f4f6;
-  font-weight: bold;
-}
+.empty { color: #888; margin-top: 0.5rem; }
 </style>
