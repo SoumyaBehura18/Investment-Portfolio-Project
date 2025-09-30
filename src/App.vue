@@ -1,72 +1,39 @@
 <template>
-  <div class="app">
-    <header>
+  <div id="app">
+    <header class="app-header">
       <h1>Investment Portfolio Management</h1>
+      <nav>
+        <router-link to="/users">Users</router-link> |
+        <router-link to="/portfolios">Portfolios</router-link>
+      </nav>
     </header>
 
-    <section class="forms">
-      <UserForm @add-user="addUser" />
-      <PortfolioForm :users="users" @add-portfolio="addPortfolio" />
-    </section>
-
-    <section class="lists">
-      <UserList :users="users" />
-      <PortfolioList :portfolios="portfolios" :users="users" />
-    </section>
+    <main class="app-main">
+      <router-view />
+    </main>
   </div>
 </template>
 
-<script>
-import UserForm from './components/UserForm.vue';
-import UserList from './components/UserList.vue';
-import PortfolioForm from './components/PortfolioForm.vue';
-import PortfolioList from './components/PortfolioList.vue';
-
-export default {
-  components: { UserForm, UserList, PortfolioForm, PortfolioList },
-  data() {
-    return {
-      users: [],
-      portfolios: []
-    };
-  },
-  methods: {
-    addUser(user) {
-      user.id = Date.now();
-      this.users.push(user);
-    },
-    addPortfolio(portfolio) {
-      portfolio.id = Date.now();
-      this.portfolios.push(portfolio);
-    }
-  }
-};
+<script setup>
+// nothing needed here
 </script>
 
 <style scoped>
-.app {
-  font-family: 'Poppins', sans-serif;
-  background: #f0f4f8;
-  min-height: 100vh;
-  padding: 2rem;
+.app-header {
+  background: #1e3a8a;
+  padding: 1rem;
+  color: white;
 }
-header {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #1e3a8a;
+nav a {
+  margin: 0 0.5rem;
+  text-decoration: none;
+  color: #facc15;
 }
-.forms {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
+nav a.router-link-active {
+  font-weight: bold;
+  text-decoration: underline;
 }
-.lists {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-section {
-  flex: 1;
+.app-main {
+  padding: 1rem;
 }
 </style>

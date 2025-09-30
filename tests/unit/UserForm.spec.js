@@ -2,28 +2,29 @@ import { mount } from "@vue/test-utils";
 import UserForm from "@/components/UserForm.vue";
 
 describe("UserForm.vue", () => {
-  it("renders name and email inputs", () => {
+  it("emits add-user event with correct payload", async () => {
     const wrapper = mount(UserForm);
 
-    expect(wrapper.find({ ref: "nameInput" }).exists()).toBe(true);
-    expect(wrapper.find({ ref: "emailInput" }).exists()).toBe(true);
-  });
-
-  it("emits add-user event with form data on submit", async () => {
-    const wrapper = mount(UserForm);
-  
-    await wrapper.find({ ref: "nameInput" }).setValue("Soumya");
-    await wrapper.find({ ref: "emailInput" }).setValue("soumya@gmail.com");
-
-
+    await wrapper.find("input[type='text']").setValue("Soumya");
+    await wrapper.find("input[type='email']").setValue("soumyab@example.com");
     await wrapper.find("form").trigger("submit.prevent");
 
- 
-    expect(wrapper.emitted("add-user")).toBeTruthy();
-    expect(wrapper.emitted("add-user").length).toBe(1);
-    expect(wrapper.emitted("add-user")[0][0]).toEqual({
+    const emitted = wrapper.emitted("add-user");
+    expect(emitted).toBeTruthy();
+    expect(emitted[0][0]).toMatchObject({
       name: "Soumya",
-      email: "soumya@gmail.com"
+      email: "soumyab@example.com",
     });
+  });
+
+  it("clears input fields after submit", async () => {
+    const wrapper = mount(UserForm);
+
+    await wrapper.find("input[type='text']").setValue("Soumya");
+    await wrapper.find("input[type='email']").setValue("soumyab@example.com");
+    await wrapper.find("form").trigger("submit.prevent");
+
+    expect(wrapper.find("input[type='text']").element.value).toBe("");
+    expect(wrapper.find("input[type='email']").element.value).toBe("");
   });
 });

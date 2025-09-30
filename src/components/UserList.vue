@@ -9,10 +9,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['users']
-};
+<script setup>
+defineProps({
+  users: {
+    type: Array,
+    required: true
+  }
+})
 </script>
 
 <style scoped>
