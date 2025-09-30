@@ -3,6 +3,7 @@
     <h2>Add Client</h2>
     <input v-model="name" type="text" placeholder="Name" required />
     <input v-model="email" type="email" placeholder="Email" required />
+    <input v-model.number="startAge" type="number" placeholder="Start Age" required />
     <button type="submit">Add</button>
   </form>
 </template>
@@ -13,16 +14,18 @@ import { ref } from "vue";
 const emit = defineEmits(["add-user"]);
 const name = ref("");
 const email = ref("");
+const startAge = ref("");
 
 function handleSubmit() {
-  emit("add-user", { id: Date.now(), name: name.value, email: email.value });
+  emit("add-user", { 
+    id: Date.now(), 
+    name: name.value, 
+    email: email.value,
+    startAge: startAge.value
+  });
+
   name.value = "";
   email.value = "";
+  startAge.value = "";
 }
 </script>
-
-<style scoped>
-.form-card { background: white; padding: 1.5rem; border-radius: 8px; display: flex; flex-direction: column; gap: 0.8rem; }
-button { background: #2563eb; color: white; border: none; padding: 0.6rem; border-radius: 6px; cursor: pointer; }
-button:hover { background: #1d4ed8; }
-</style>

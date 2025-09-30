@@ -3,11 +3,12 @@
     <h2>Users</h2>
     <ul>
       <li v-for="user in users" :key="user.id">
-        {{ user.name }} ({{ user.email }})
+        {{ user.name }} ({{ user.email }}) – Age: {{ user.startAge }}
       </li>
     </ul>
   </div>
 </template>
+
 
 <script setup>
 defineProps({
