@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import UserManagement from "@/views/UserManagement.vue";
 import PortfolioManagement from "@/views/PortfolioManagement.vue";
+import UserPage from "@/views/UserPage.vue";
+
 
 const routes = [
   { path: "/", redirect: "/users" },
@@ -12,6 +14,7 @@ const routes = [
     component: () => import("@/components/PortfolioDetail.vue"),
     props: true,
   },
+  {path: "/users/:id", name: "UserPage", component: UserPage, props: true},
 ];
 
 const router = createRouter({
